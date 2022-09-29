@@ -1,0 +1,11 @@
+.Board--container {
+  width: 500px;
+  height: 500px;
+  margin: 50px auto;
+  display: grid;
+  padding: 20px 15px;
+  gap: 15px;
+  grid-template-columns: auto auto auto auto;
+  background-color: #679289;
+  position: relative;
+}

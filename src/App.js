@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Board from "./components/Board";
+import Finish from "./components/Finish";
 
 import cardTypes from "./data-json/card-types.json";
 
@@ -15,7 +16,7 @@ const Container = styled.div`
 function App() {
   const [randomList, setRandomList] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [isCheckDone, setIsCheckDone] = useState();
+  const [isFinish, setIsFinish] = useState(false);
 
   useEffect(() => {
     // Random cards
@@ -42,10 +43,12 @@ function App() {
   useEffect(() => {
     const tmp = [...randomList];
     // Handle check correct
-    if (selectedItems.length === 2) {
-      setIsCheckDone(false);
-      if (selectedItems[0]?.code === selectedItems[1]?.code) {
-        const code = selectedItems[0]?.code;
+    if (selectedItems.length) {
+      if (
+        selectedItems[selectedItems.length - 2]?.code ===
+        selectedItems[selectedItems.length - 1]?.code
+      ) {
+        const code = selectedItems[selectedItems.length - 2]?.code;
         tmp.forEach((item) => {
           if (item.code === code) {
             item.isCorrect = true;
@@ -54,16 +57,12 @@ function App() {
         setRandomList(tmp);
       }
     }
-    setIsCheckDone(true);
   }, [selectedItems]);
 
   useEffect(() => {
-    if (isCheckDone) {
-      setTimeout(() => {
-        setSelectedItems([]);
-      }, 1000);
-    }
-  }, [isCheckDone]);
+    if (!randomList.length) return;
+    checkFinish();
+  }, [randomList]);
 
   function shuffleCard(array) {
     let currentIndex = array.length,
@@ -86,11 +85,7 @@ function App() {
   }
 
   function handleSelectCard(card) {
-    if (selectedItems.length > 1) {
-      setSelectedItems([card]);
-    } else {
-      setSelectedItems([...selectedItems, card]);
-    }
+    setSelectedItems([...selectedItems, card]);
   }
 
   function handleStart() {
@@ -108,6 +103,13 @@ function App() {
     }, 4000);
   }
 
+  function checkFinish() {
+    const tmp = randomList.filter((item) => item.isCorrect === false);
+    if (!tmp.length) {
+      setIsFinish(true);
+    }
+  }
+
   return (
     <Container>
       <div className="window" style={{ width: "820px" }}>
@@ -116,12 +118,15 @@ function App() {
         </div>
         <div className="window-body">
           <div style={{ display: "block" }}>
-            <Board
-              cardsList={randomList}
-              handleSelectCard={handleSelectCard}
-              onStart={handleStart}
-              isCheckDone={isCheckDone}
-            />
+            {isFinish ? (
+              <Finish />
+            ) : (
+              <Board
+                cardsList={randomList}
+                handleSelectCard={handleSelectCard}
+                onStart={handleStart}
+              />
+            )}
           </div>
         </div>
         <div className="status-bar">

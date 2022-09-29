@@ -2,17 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Card from "./Card";
 
-const Container = styled.div`
-  width: 500px;
-  height: 500px;
-  margin: 50px auto;
-  display: grid;
-  padding: 20px 15px;
-  gap: 15px;
-  grid-template-columns: auto auto auto auto;
-  background-color: #679289;
-  position: relative;
-`;
 const StyledButton = styled.button`
   font-size: 14px;
   font-weight: 700;
@@ -22,7 +11,7 @@ const StyledButton = styled.button`
   margin: 20px auto;
 `;
 
-const Board = ({ cardsList, handleSelectCard, onStart, isCheckDone }) => {
+const Board = ({ cardsList, handleSelectCard, onStart }) => {
   const [isStarted, setIsStarted] = useState(false);
 
   function handleClickStart() {
@@ -33,18 +22,17 @@ const Board = ({ cardsList, handleSelectCard, onStart, isCheckDone }) => {
   return (
     <>
       {isStarted ? (
-        <Container>
+        <div className="Board--container">
           {cardsList.map((card, index) => (
             <>
               <Card
                 key={index}
                 card={card}
                 handleSelectCard={handleSelectCard}
-                isCheckDone={isCheckDone}
               />
             </>
           ))}
-        </Container>
+        </div>
       ) : (
         <StyledButton onClick={handleClickStart}>Start</StyledButton>
       )}

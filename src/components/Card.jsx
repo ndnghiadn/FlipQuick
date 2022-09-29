@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Card = ({ card, handleSelectCard, isCheckDone }) => {
+const Card = ({ card, handleSelectCard }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isShowStart, setIsShowStart] = useState(false);
 
@@ -25,7 +25,6 @@ const Card = ({ card, handleSelectCard, isCheckDone }) => {
 
   const onSelectCard = () => {
     // if (isFlipped || isShowStart) return;
-    if (!isCheckDone) return;
     handleSelectCard(card);
     setIsFlipped(true);
   };

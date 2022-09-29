@@ -1,0 +1,12 @@
+@media screen and (max-width: 600px) {
+  .Board--container {
+    width: 100%;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    img {
+      width: 50px;
+    }
+  }
+}
