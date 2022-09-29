@@ -24,7 +24,7 @@ const Card = ({ card, handleSelectCard }) => {
   }, [isFlipped, card.isCorrect]);
 
   const onSelectCard = () => {
-    // if (isFlipped || isShowStart) return;
+    if (isFlipped || isShowStart) return;
     handleSelectCard(card);
     setIsFlipped(true);
   };

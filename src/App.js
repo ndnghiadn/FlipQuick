@@ -19,8 +19,18 @@ function App() {
   const [isFinish, setIsFinish] = useState(false);
   const [startTime, setStartTime] = useState();
   const [totalTime, setTotalTime] = useState();
+  const [isOnline, setIsOnline] = useState(true);
+  const [record, setRecord] = useState();
 
   useEffect(() => {
+    // Get record
+    const found = localStorage.getItem("record");
+    if (found) {
+      setRecord(found);
+    } else {
+      setRecord(null);
+    }
+
     // Random cards
     (() => {
       const tmp = [];
@@ -48,7 +58,9 @@ function App() {
     if (selectedItems.length) {
       if (
         selectedItems[selectedItems.length - 2]?.code ===
-        selectedItems[selectedItems.length - 1]?.code
+          selectedItems[selectedItems.length - 1]?.code &&
+        selectedItems[selectedItems.length - 2]?.idKey !==
+          selectedItems[selectedItems.length - 1]?.idKey
       ) {
         const code = selectedItems[selectedItems.length - 2]?.code;
         tmp.forEach((item) => {
@@ -110,7 +122,19 @@ function App() {
     const tmp = randomList.filter((item) => item.isCorrect === false);
     if (!tmp.length) {
       setIsFinish(true);
-      setTotalTime(`${(new Date() - startTime) / 1000} seconds `);
+
+      const timeRecord = (new Date() - startTime) / 1000;
+      setTotalTime(`${timeRecord} seconds `);
+
+      // check localStorage
+      const foundItem = localStorage.getItem("record");
+      if (foundItem) {
+        if (timeRecord < foundItem) {
+          localStorage.setItem("record", timeRecord);
+        }
+      } else {
+        localStorage.setItem("record", timeRecord);
+      }
     }
   }
 
@@ -119,12 +143,14 @@ function App() {
       <div className="window" style={{ width: "820px" }}>
         <div className="title-bar">
           <div className="title-bar-text">Pick Quickly</div>
-          <div class="title-bar-controls">
-            <button
-              aria-label="Close"
-              onClick={() => setIsFinish(false)}
-            ></button>
-          </div>
+          {isFinish && (
+            <div class="title-bar-controls">
+              <button
+                aria-label="Close"
+                onClick={() => window.location.reload(false)}
+              ></button>
+            </div>
+          )}
         </div>
         <div className="window-body">
           <div style={{ display: "block" }}>
@@ -140,9 +166,21 @@ function App() {
           </div>
         </div>
         <div className="status-bar">
-          <p className="status-bar-field">Hi, stranger#919</p>
-          <p className="status-bar-field">Coins: 693</p>
-          <p className="status-bar-field">Press F1 for help</p>
+          <p className="status-bar-field">Hi, stranger#322</p>
+          <p className="status-bar-field">
+            {record ? `Record: ${record}s` : "No record"}
+          </p>
+          <p
+            className="status-bar-field"
+            onClick={() => setIsOnline(!isOnline)}
+          >
+            <span
+              style={{ color: isOnline ? "green" : "red", marginRight: "5px" }}
+            >
+              ◉
+            </span>
+            {isOnline ? "Online" : "Busy"}
+          </p>
         </div>
       </div>
     </Container>
