@@ -17,6 +17,8 @@ function App() {
   const [randomList, setRandomList] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [isFinish, setIsFinish] = useState(false);
+  const [startTime, setStartTime] = useState();
+  const [totalTime, setTotalTime] = useState();
 
   useEffect(() => {
     // Random cards
@@ -100,6 +102,7 @@ function App() {
         item.isSelected = false;
       });
       setRandomList(tmp);
+      setStartTime(new Date());
     }, 4000);
   }
 
@@ -107,6 +110,7 @@ function App() {
     const tmp = randomList.filter((item) => item.isCorrect === false);
     if (!tmp.length) {
       setIsFinish(true);
+      setTotalTime(`${(new Date() - startTime) / 1000} seconds `);
     }
   }
 
@@ -114,12 +118,18 @@ function App() {
     <Container>
       <div className="window" style={{ width: "820px" }}>
         <div className="title-bar">
-          <div className="title-bar-text">Play Pick-Quickly</div>
+          <div className="title-bar-text">Pick Quickly</div>
+          <div class="title-bar-controls">
+            <button
+              aria-label="Close"
+              onClick={() => setIsFinish(false)}
+            ></button>
+          </div>
         </div>
         <div className="window-body">
           <div style={{ display: "block" }}>
             {isFinish ? (
-              <Finish />
+              <Finish totalTime={totalTime} />
             ) : (
               <Board
                 cardsList={randomList}

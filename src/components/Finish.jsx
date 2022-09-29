@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Finish = () => {
+const Finish = ({ totalTime }) => {
   return (
-    <div>Finish</div>
+    <div>Finished in {totalTime}</div>
   )
 }
 
