@@ -142,7 +142,7 @@ function App() {
     <Container>
       <div className="window" style={{ width: "820px" }}>
         <div className="title-bar">
-          <div className="title-bar-text">Pick Quickly</div>
+          <div className="title-bar-text">Flip Quick</div>
           {isFinish && (
             <div class="title-bar-controls">
               <button
