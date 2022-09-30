@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema(
     },
     record: {
       type: String,
-      default: 0,
+      default: 299,
     },
   },
   { timestamps: true }

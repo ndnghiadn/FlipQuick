@@ -39,3 +39,13 @@ export const getUser = async (req, res, next) => {
     next(err);
   }
 };
+
+export const setRecord = async (req, res, next) => {
+  const { userId, record } = req.body;
+  try {
+    await User.findByIdAndUpdate(userId, { record });
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
