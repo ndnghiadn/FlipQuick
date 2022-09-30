@@ -8,12 +8,12 @@ const router = express.Router();
 router.post("/", verifyToken, createRoom);
 
 // Get room
-router.get("/:roomId", verifyToken, getRoom);
+router.get("/:roomId", getRoom);
 
 // Get logs
-router.get("/getLogs/:roomId", verifyToken, getLog);
+router.get("/getLogs/:roomId", getLog);
 
 // Assign log
-router.post("/assignLog", verifyToken, assignLog);
+router.post("/assignLog", assignLog);
 
 export default router;
