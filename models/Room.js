@@ -1,18 +1,11 @@
 import mongoose from "mongoose";
 
-const RoomSchema = mongoose.Schema(
+const RoomSchema = new mongoose.Schema(
   {
-    code: {
+    logs: [{
       type: String,
-      unique: true,
-      require: true,
-    },
-    logs: [
-      {
-        type: String,
-        require: true,
-      },
-    ],
+      default: ""
+    }]
   },
   { timestamps: true }
 );
