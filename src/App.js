@@ -184,7 +184,7 @@ function App() {
     if (!roomData) return;
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/rooms/assignLog`, {
-        roomId: roomData._id,
+        roomId: roomData?._id,
         log,
       });
     } catch (err) {
