@@ -25,6 +25,7 @@ function App() {
   const [record, setRecord] = useState();
   const [userData, setUserData] = useState();
   const [roomData, setRoomData] = useState();
+  const [strangerCode, setStrangerCode] = useState();
 
   useEffect(() => {
     // Get record
@@ -37,6 +38,9 @@ function App() {
 
     // Random cards
     shuffleCard();
+
+    // Random stranger's code 1-1000
+    setStrangerCode(Math.round(Math.random() * 1000));
   }, []);
 
   useEffect(() => {
@@ -212,7 +216,7 @@ function App() {
     if (userData) {
       assignLog(`${userData.username}: ${timeRecord}s`);
     } else {
-      assignLog(`stranger#322: ${timeRecord}s`);
+      assignLog(`stranger#${strangerCode}: ${timeRecord}s`);
     }
   }
 
@@ -253,7 +257,7 @@ function App() {
         </div>
         <div className="status-bar">
           <p className="status-bar-field">
-            Hi, {userData ? userData.username : "stranger#322"}
+            Hi, {userData ? userData.username : `stranger#${strangerCode}`}
           </p>
           <p className="status-bar-field">
             {userData
