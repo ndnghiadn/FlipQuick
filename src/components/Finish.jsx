@@ -6,7 +6,7 @@ const Container = styled.div`
   width: 100%;
   max-height: 500px;
   padding: 10px 20px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 const StyledButton = styled.button`
   font-size: 14px;

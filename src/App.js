@@ -36,24 +36,7 @@ function App() {
     }
 
     // Random cards
-    (() => {
-      const tmp = [];
-      cardTypes.forEach((type) => {
-        tmp.push({
-          ...type,
-          idKey: 1,
-          isCorrect: false,
-          isSelected: false,
-        });
-        tmp.push({
-          ...type,
-          idKey: 2,
-          isCorrect: false,
-          isSelected: false,
-        });
-      });
-      setRandomList(shuffleCard(tmp));
-    })();
+    shuffleCard();
   }, []);
 
   useEffect(() => {
@@ -82,8 +65,24 @@ function App() {
     checkFinish();
   }, [randomList]);
 
-  function shuffleCard(array) {
-    let currentIndex = array.length,
+  function shuffleCard() {
+    const tmp = [];
+    cardTypes.forEach((type) => {
+      tmp.push({
+        ...type,
+        idKey: 1,
+        isCorrect: false,
+        isSelected: false,
+      });
+      tmp.push({
+        ...type,
+        idKey: 2,
+        isCorrect: false,
+        isSelected: false,
+      });
+    });
+
+    let currentIndex = tmp.length,
       randomIndex;
 
     // While there remain elements to shuffle.
@@ -93,13 +92,13 @@ function App() {
       currentIndex--;
 
       // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
+      [tmp[currentIndex], tmp[randomIndex]] = [
+        tmp[randomIndex],
+        tmp[currentIndex],
       ];
     }
 
-    return array;
+    setRandomList(tmp);
   }
 
   function handleSelectCard(card) {
@@ -107,6 +106,7 @@ function App() {
   }
 
   function handleStart() {
+
     const tmp = [...randomList];
 
     setTimeout(() => {
@@ -142,6 +142,7 @@ function App() {
     setRandomList(tmp);
     setIsFinish(false);
     setSelectedItems([]);
+    shuffleCard();
   }
 
   async function handleJoinRoom() {
@@ -174,6 +175,7 @@ function App() {
         }
       );
       setUserData(response.data);
+      setRecord(response.data.record);
       toast.success("Login successfully!");
     } catch (err) {
       toast.error("Wrong credentials!");
@@ -214,6 +216,10 @@ function App() {
     }
   }
 
+  function handleLeaveRoom() {
+    setRoomData(null);
+  }
+
   return (
     <Container>
       <div className="window" style={{ width: "820px" }}>
@@ -237,6 +243,7 @@ function App() {
                 handleSelectCard={handleSelectCard}
                 onStart={handleStart}
                 handleJoinRoom={handleJoinRoom}
+                handleLeaveRoom={handleLeaveRoom}
                 handleLogin={handleLogin}
                 userData={userData}
                 roomData={roomData}
@@ -268,8 +275,12 @@ function App() {
           </p>
         </div>
       </div>
-
-      <ToastContainer />
+      <ToastContainer
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={true}
+        rtl={false}
+      />
     </Container>
   );
 }
