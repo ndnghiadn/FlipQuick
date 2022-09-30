@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Board from "./components/Board";
 import Finish from "./components/Finish";
+import { useParams } from "react-router-dom";
 
 import cardTypes from "./data-json/card-types.json";
 
@@ -21,6 +22,13 @@ function App() {
   const [totalTime, setTotalTime] = useState();
   const [isOnline, setIsOnline] = useState(true);
   const [record, setRecord] = useState();
+  const { roomId } = useParams();
+  const [hasJoinedRoom, setHasJoinedRoom] = useState(false);
+
+  useEffect(() => {
+    if (!roomId) return;
+    setHasJoinedRoom(true);
+  }, [roomId]);
 
   useEffect(() => {
     // Get record
@@ -104,10 +112,13 @@ function App() {
 
   function handleStart() {
     const tmp = [...randomList];
-    tmp.forEach((item) => {
-      item.isSelected = true;
-    });
-    setRandomList(tmp);
+
+    setTimeout(() => {
+      tmp.forEach((item) => {
+        item.isSelected = true;
+      });
+      setRandomList(tmp);
+    }, 1000); // Loading image time
 
     setTimeout(() => {
       tmp.forEach((item) => {
@@ -115,7 +126,7 @@ function App() {
       });
       setRandomList(tmp);
       setStartTime(new Date());
-    }, 4000);
+    }, process.env.REACT_APP_SHOWTIME);
   }
 
   function checkFinish() {
@@ -149,6 +160,12 @@ function App() {
     setSelectedItems([]);
   }
 
+  function handleJoinRoom() {
+    let tmp = prompt("Please enter room ID");
+
+    // if room valid
+  }
+
   return (
     <Container>
       <div className="window" style={{ width: "820px" }}>
@@ -169,6 +186,8 @@ function App() {
                 cardsList={randomList}
                 handleSelectCard={handleSelectCard}
                 onStart={handleStart}
+                handleJoinRoom={handleJoinRoom}
+                hasJoinedRoom={hasJoinedRoom}
               />
             )}
           </div>

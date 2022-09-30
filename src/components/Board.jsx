@@ -5,13 +5,18 @@ import Card from "./Card";
 const StyledButton = styled.button`
   font-size: 14px;
   font-weight: 700;
-  text-transform: uppercase;
   padding: 10px 20px;
-  display: block;
-  margin: 20px auto;
+  margin: 10px 0;
+  margin-left: 20px;
 `;
 
-const Board = ({ cardsList, handleSelectCard, onStart }) => {
+const Board = ({
+  cardsList,
+  handleSelectCard,
+  onStart,
+  handleJoinRoom,
+  hasJoinedRoom,
+}) => {
   const [isStarted, setIsStarted] = useState(false);
 
   function handleClickStart() {
@@ -34,7 +39,13 @@ const Board = ({ cardsList, handleSelectCard, onStart }) => {
           ))}
         </div>
       ) : (
-        <StyledButton onClick={handleClickStart}>Start</StyledButton>
+        <>
+          <StyledButton onClick={handleClickStart}>Start</StyledButton>
+          {!hasJoinedRoom && (
+            <StyledButton onClick={handleJoinRoom}>Join</StyledButton>
+          )}
+          <StyledButton>Login</StyledButton>
+        </>
       )}
     </>
   );
