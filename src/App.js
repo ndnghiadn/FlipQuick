@@ -138,6 +138,17 @@ function App() {
     }
   }
 
+  function handleRestart() {
+    const tmp = randomList.map((item) => ({
+      ...item,
+      isCorrect: false,
+      isSelected: false,
+    }));
+    setRandomList(tmp);
+    setIsFinish(false);
+    setSelectedItems([]);
+  }
+
   return (
     <Container>
       <div className="window" style={{ width: "820px" }}>
@@ -145,10 +156,7 @@ function App() {
           <div className="title-bar-text">Flip Quick</div>
           {isFinish && (
             <div class="title-bar-controls">
-              <button
-                aria-label="Close"
-                onClick={() => window.location.reload(false)}
-              ></button>
+              <button aria-label="Close" onClick={handleRestart}></button>
             </div>
           )}
         </div>
