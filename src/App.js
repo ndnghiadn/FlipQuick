@@ -219,7 +219,7 @@ function App() {
       <div className="window" style={{ width: "820px" }}>
         <div className="title-bar">
           <div className="title-bar-text">
-            Flip Quick {roomData && `- Room#${roomData._id}`}
+            Flip Quick {roomData && `- Room#${roomData?._id}`}
           </div>
           {isFinish && (
             <div class="title-bar-controls">
@@ -230,7 +230,7 @@ function App() {
         <div className="window-body">
           <div style={{ display: "block" }}>
             {isFinish ? (
-              <Finish totalTime={totalTime} roomId={roomData._id} />
+              <Finish totalTime={totalTime} roomId={roomData?._id} />
             ) : (
               <Board
                 cardsList={randomList}
