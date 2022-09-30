@@ -37,13 +37,17 @@ const Finish = ({ totalTime, roomId = null }) => {
   return (
     <Container>
       <span>You finished in {totalTime}</span>
-      <p>Records in this room:</p>
-      <ul>
-        {logs.map((log, index) => (
-          <li key={index}>{log}</li>
-        ))}
-      </ul>
-      <StyledButton onClick={handleRefresh}>Refresh</StyledButton>
+      {roomId && (
+        <>
+          <p>Records in this room:</p>
+          <ul>
+            {logs.map((log, index) => (
+              <li key={index}>{log}</li>
+            ))}
+          </ul>
+          <StyledButton onClick={handleRefresh}>Refresh</StyledButton>
+        </>
+      )}
     </Container>
   );
 };
