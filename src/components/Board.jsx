@@ -15,7 +15,9 @@ const Board = ({
   handleSelectCard,
   onStart,
   handleJoinRoom,
-  hasJoinedRoom,
+  handleLogin,
+  userData,
+  roomData,
 }) => {
   const [isStarted, setIsStarted] = useState(false);
 
@@ -41,10 +43,12 @@ const Board = ({
       ) : (
         <>
           <StyledButton onClick={handleClickStart}>Start</StyledButton>
-          {!hasJoinedRoom && (
+          {!roomData && (
             <StyledButton onClick={handleJoinRoom}>Join</StyledButton>
           )}
-          <StyledButton>Login</StyledButton>
+          {!userData && (
+            <StyledButton onClick={handleLogin}>Login</StyledButton>
+          )}
         </>
       )}
     </>
