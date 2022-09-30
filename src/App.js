@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import styled from "styled-components";
 import Board from "./components/Board";
 import Finish from "./components/Finish";
+import Loader from "./components/Loader";
 
 import cardTypes from "./data-json/card-types.json";
 
@@ -26,6 +27,7 @@ function App() {
   const [userData, setUserData] = useState();
   const [roomData, setRoomData] = useState();
   const [strangerCode, setStrangerCode] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Get record
@@ -110,7 +112,6 @@ function App() {
   }
 
   function handleStart() {
-
     const tmp = [...randomList];
 
     setTimeout(() => {
@@ -153,6 +154,7 @@ function App() {
     let tmp = prompt("Please enter room ID");
     if (!tmp) return;
 
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/rooms/${tmp}`
@@ -162,6 +164,7 @@ function App() {
     } catch (err) {
       toast.error("Room ID is invalid!");
     }
+    setIsLoading(false);
   }
 
   async function handleLogin() {
@@ -170,6 +173,7 @@ function App() {
     let password = prompt("Please enter your password");
     if (!password) return;
 
+    setIsLoading(true);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/auth/signin`,
@@ -184,10 +188,13 @@ function App() {
     } catch (err) {
       toast.error("Wrong credentials!");
     }
+    setIsLoading(false);
   }
 
   async function assignLog(log) {
     if (!roomData) return;
+
+    setIsLoading(true);
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/rooms/assignLog`, {
         roomId: roomData?._id,
@@ -196,6 +203,7 @@ function App() {
     } catch (err) {
       console.log(err);
     }
+    setIsLoading(false);
   }
 
   function handleFinish() {
@@ -226,6 +234,7 @@ function App() {
 
   return (
     <Container>
+      {isLoading && <Loader />}
       <div className="window" style={{ width: "820px" }}>
         <div className="title-bar">
           <div className="title-bar-text">
