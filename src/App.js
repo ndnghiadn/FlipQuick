@@ -160,7 +160,6 @@ function App() {
         `${process.env.REACT_APP_API_URL}/rooms/${tmp}`
       );
       setRoomData(response.data.data);
-      toast.success("Joined room successfully!");
     } catch (err) {
       toast.error("Room ID is invalid!");
     }
@@ -210,14 +209,32 @@ function App() {
     const timeRecord = (new Date() - startTime) / 1000;
     setTotalTime(`${timeRecord} seconds`);
 
-    // check localStorage
-    const foundItem = localStorage.getItem("record");
-    if (foundItem) {
-      if (timeRecord < foundItem) {
-        localStorage.setItem("record", timeRecord);
+    if (userData) {
+      // check user record
+      if (timeRecord < userData.record) {
+        // set record of user to new value
+        (async () => {
+          await axios.post(`${process.env.REACT_APP_API_URL}/users/setRecord`, {
+            userId: userData._id,
+            record: timeRecord,
+          });
+        })();
+        setRecord(timeRecord);
+        setUserData({
+          ...userData,
+          record: timeRecord,
+        });
       }
     } else {
-      localStorage.setItem("record", timeRecord);
+      // check localStorage
+      const foundItem = localStorage.getItem("record");
+      if (foundItem) {
+        if (timeRecord < foundItem) {
+          localStorage.setItem("record", timeRecord);
+        }
+      } else {
+        localStorage.setItem("record", timeRecord);
+      }
     }
 
     // assign log
@@ -235,7 +252,12 @@ function App() {
   return (
     <Container>
       {isLoading && <Loader />}
-      <div className="window" style={{ width: "820px" }}>
+      <div
+        className="window"
+        style={{
+          width: "820px",
+        }}
+      >
         <div className="title-bar">
           <div className="title-bar-text">
             Flip Quick {roomData && `- Room#${roomData?._id}`}
@@ -270,9 +292,9 @@ function App() {
           </p>
           <p className="status-bar-field">
             {userData
-              ? `Record: ${userData.record}s`
+              ? `${userData.record}s`
               : record
-              ? `Record: ${record}s`
+              ? `${record}s`
               : "No record"}
           </p>
           <p
