@@ -219,11 +219,11 @@ function App() {
             record: timeRecord,
           });
         })();
-        setRecord(timeRecord);
         setUserData({
           ...userData,
           record: timeRecord,
         });
+        setRecord(timeRecord);
       }
     } else {
       // check localStorage
@@ -231,9 +231,11 @@ function App() {
       if (foundItem) {
         if (timeRecord < foundItem) {
           localStorage.setItem("record", timeRecord);
+          setRecord(timeRecord);
         }
       } else {
         localStorage.setItem("record", timeRecord);
+        setRecord(timeRecord);
       }
     }
 
