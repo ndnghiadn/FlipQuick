@@ -15,11 +15,28 @@ const StyledButton = styled.button`
   margin: 10px 0;
 `;
 
-const Finish = ({ handleRefresh, roomData, totalTime, handleRestart }) => {
+const Finish = ({ roomData, totalTime, handleRestart, setIsLoading }) => {
+  const [logs, setLogs] = useState([]);
+
   useEffect(() => {
     if (!roomData) return;
-    handleRefresh();
+    setTimeout(() => {
+      handleRefresh();
+    }, 500);
   }, []);
+
+  async function handleRefresh() {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomData._id}`
+      );
+      setLogs(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
+  }
 
   return (
     <Container>
@@ -31,7 +48,7 @@ const Finish = ({ handleRefresh, roomData, totalTime, handleRestart }) => {
         <>
           <p>Records in this room:</p>
           <ul>
-            {roomData.logs.map((log, index) => (
+            {logs.map((log, index) => (
               <li key={index}>{log}</li>
             ))}
           </ul>

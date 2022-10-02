@@ -286,21 +286,6 @@ function App() {
         setRecord(timeRecord);
       }
     }
-
-    if (roomData) {
-      handleRefresh();
-      if (userData) {
-        setRoomData({
-          ...roomData,
-          logs: [...roomData.logs, `${userData.username}: ${timeRecord}s`],
-        });
-      } else {
-        setRoomData({
-          ...roomData,
-          logs: [...roomData.logs, `stranger#${strangerCode}: ${timeRecord}s`],
-        });
-      }
-    }
   }
 
   function handleLeaveRoom() {
@@ -330,22 +315,6 @@ function App() {
     setIsLoading(false);
   }
 
-  async function handleRefresh() {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomData._id}`
-      );
-      setRoomData({
-        ...roomData,
-        logs: response.data.data,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-    setIsLoading(false);
-  }
-
   return (
     <Container>
       {isLoading && <Loader />}
@@ -364,16 +333,10 @@ function App() {
           <div style={{ display: "block" }}>
             {isFinish ? (
               <Finish
-                handleRefresh={handleRefresh}
-                isFinish={isFinish}
                 totalTime={totalTime}
                 handleRestart={handleRestart}
                 setIsLoading={setIsLoading}
                 roomData={roomData}
-                setRoomData={setRoomData}
-                userData={userData}
-                timeRecord={totalTime}
-                strangerCode={strangerCode}
               />
             ) : (
               <Board
