@@ -19,12 +19,12 @@ const Card = ({ card, handleSelectCard }) => {
     } else {
       setTimeout(() => {
         setIsFlipped(false);
-      }, 1000);
+      }, 500);
     }
   }, [isFlipped, card.isCorrect]);
 
   const onSelectCard = () => {
-    if (isFlipped || isShowStart) return;
+    if (isShowStart) return;
     handleSelectCard(card);
     setIsFlipped(true);
   };

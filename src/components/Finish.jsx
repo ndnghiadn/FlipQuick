@@ -16,26 +16,33 @@ const StyledButton = styled.button`
 `;
 
 const Finish = ({
-  isFinish,
+  roomData,
+  setRoomData,
+  userData,
+  strangerCode,
   totalTime,
-  roomId,
   handleRestart,
   setIsLoading,
 }) => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    if (!isFinish) return;
-    handleRefresh();
-  }, [isFinish]);
+    if (!roomData) return;
+    if (userData) {
+      setLogs([...roomData.logs, `${userData.username}: ${totalTime}s`]);
+    } else {
+      setLogs([...roomData.logs, `stranger#${strangerCode}: ${totalTime}s`]);
+    }
+  }, [roomData]);
 
   async function handleRefresh() {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomId}`
+        `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomData._id}`
       );
       setLogs(response.data.data);
+      setRoomData({ ...roomData, logs: response.data.data });
     } catch (err) {
       console.log(err);
     }
@@ -44,11 +51,11 @@ const Finish = ({
 
   return (
     <Container>
-      <span>You finished in {totalTime}</span>{" "}
+      <span>You finished in {totalTime} seconds</span>{" "}
       <StyledButton onClick={handleRestart} style={{ marginLeft: "10px" }}>
         Back
       </StyledButton>
-      {roomId && (
+      {roomData?._id && (
         <>
           <p>Records in this room:</p>
           <ul>

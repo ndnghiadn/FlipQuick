@@ -188,6 +188,7 @@ function App() {
         `${process.env.REACT_APP_API_URL}/rooms/${tmp}`
       );
       setRoomData(response.data.data);
+      console.log(response.data.data);
     } catch (err) {
       toast.error("Room code is invalid!");
     }
@@ -238,7 +239,7 @@ function App() {
     document.getElementById("finishSound").play();
 
     const timeRecord = (new Date() - startTime) / 1000;
-    setTotalTime(`${timeRecord} seconds`);
+    setTotalTime(timeRecord);
 
     if (userData) {
       // check user record
@@ -320,11 +321,12 @@ function App() {
           <div style={{ display: "block" }}>
             {isFinish ? (
               <Finish
-                isFinish={isFinish}
                 totalTime={totalTime}
-                roomId={roomData?._id}
                 handleRestart={handleRestart}
                 setIsLoading={setIsLoading}
+                userData={userData}
+                strangerCode={strangerCode}
+                roomData={roomData}
               />
             ) : (
               <Board
