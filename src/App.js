@@ -147,7 +147,7 @@ function App() {
         item.isSelected = true;
       });
       setRandomList(tmp);
-    }, 500); // Loading image time
+    }, 1000); // Loading image time
 
     setTimeout(() => {
       tmp.forEach((item) => {
@@ -320,9 +320,11 @@ function App() {
           <div style={{ display: "block" }}>
             {isFinish ? (
               <Finish
+                isFinish={isFinish}
                 totalTime={totalTime}
                 roomId={roomData?._id}
                 handleRestart={handleRestart}
+                setIsLoading={setIsLoading}
               />
             ) : (
               <Board

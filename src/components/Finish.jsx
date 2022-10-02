@@ -15,15 +15,22 @@ const StyledButton = styled.button`
   margin: 10px 0;
 `;
 
-const Finish = ({ totalTime, roomId = null, handleRestart }) => {
+const Finish = ({
+  isFinish,
+  totalTime,
+  roomId,
+  handleRestart,
+  setIsLoading,
+}) => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    if (!roomId) return;
+    if (!isFinish) return;
     handleRefresh();
-  }, [roomId]);
+  }, [isFinish]);
 
   async function handleRefresh() {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomId}`
@@ -32,6 +39,7 @@ const Finish = ({ totalTime, roomId = null, handleRestart }) => {
     } catch (err) {
       console.log(err);
     }
+    setIsLoading(false);
   }
 
   return (
