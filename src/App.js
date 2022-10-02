@@ -6,6 +6,11 @@ import Board from "./components/Board";
 import Finish from "./components/Finish";
 import Loader from "./components/Loader";
 
+// SOUNDS
+import gameSound from "./assets/sounds/game.ogg";
+import startSound from "./assets/sounds/start.wav";
+import finishSound from "./assets/sounds/finish.wav";
+
 import cardTypes from "./data-json/card-types.json";
 
 const Container = styled.div`
@@ -43,6 +48,15 @@ function App() {
 
     // Random stranger's code 1-1000
     setStrangerCode(Math.round(Math.random() * 1000));
+
+    // Play sound
+    document.addEventListener("mousemove", (e) => {
+      document.getElementById("bgSound").play();
+    });
+
+    return () => {
+      document.removeEventListener("mousemove", (e) => {});
+    };
   }, []);
 
   useEffect(() => {
@@ -112,6 +126,9 @@ function App() {
   }
 
   function handleStart() {
+    // Play sound
+    document.getElementById("startSound").play();
+
     const tmp = [...randomList];
 
     setTimeout(() => {
@@ -206,6 +223,9 @@ function App() {
   }
 
   function handleFinish() {
+    // Play sound
+    document.getElementById("finishSound").play();
+
     const timeRecord = (new Date() - startTime) / 1000;
     setTotalTime(`${timeRecord} seconds`);
 
@@ -318,6 +338,17 @@ function App() {
         newestOnTop={true}
         rtl={false}
       />
+
+      {/* GAME SOUNDS */}
+      <audio id="bgSound">
+        <source src={gameSound} type="audio/ogg" />
+      </audio>
+      <audio id="startSound">
+        <source src={startSound} type="audio/wav" />
+      </audio>
+      <audio id="finishSound">
+        <source src={finishSound} type="audio/wav" />
+      </audio>
     </Container>
   );
 }
