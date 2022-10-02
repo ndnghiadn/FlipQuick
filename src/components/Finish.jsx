@@ -27,6 +27,7 @@ const Finish = ({
 }) => {
   useEffect(() => {
     if (!roomData) return;
+    handleRefresh();
     if (userData) {
       setRoomData({
         ...roomData,
