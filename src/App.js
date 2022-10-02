@@ -11,6 +11,9 @@ import gameSound from "./assets/sounds/game.ogg";
 import startSound from "./assets/sounds/start.wav";
 import clickSound from "./assets/sounds/click.wav";
 import finishSound from "./assets/sounds/finish.wav";
+import joinSound from "./assets/sounds/join.wav";
+import leaveSound from "./assets/sounds/leave.wav";
+import backSound from "./assets/sounds/back.wav";
 
 const Container = styled.div`
   width: 100vw;
@@ -174,6 +177,11 @@ function App() {
     }));
     setRandomList(tmp);
     setIsFinish(false);
+
+    // Play sound
+    document.getElementById("backSound").play();
+
+    // Prepare for next round
     setSelectedItems([]);
     shuffleCard();
   }
@@ -188,7 +196,9 @@ function App() {
         `${process.env.REACT_APP_API_URL}/rooms/${tmp}`
       );
       setRoomData(response.data.data);
-      console.log(response.data.data);
+
+      // Play sound
+      document.getElementById("joinSound").play();
     } catch (err) {
       toast.error("Room code is invalid!");
     }
@@ -241,6 +251,20 @@ function App() {
     const timeRecord = (new Date() - startTime) / 1000;
     setTotalTime(timeRecord);
 
+    if (roomData) {
+      if (userData) {
+        setRoomData({
+          ...roomData,
+          logs: [...roomData.logs, `${userData.username}: ${timeRecord}s`],
+        });
+      } else {
+        setRoomData({
+          ...roomData,
+          logs: [...roomData.logs, `stranger#${strangerCode}: ${timeRecord}s`],
+        });
+      }
+    }
+
     if (userData) {
       // check user record
       if (timeRecord < userData.record) {
@@ -281,6 +305,9 @@ function App() {
 
   function handleLeaveRoom() {
     setRoomData(null);
+
+    // Play sound
+    document.getElementById("leaveSound").play();
   }
 
   async function handleCreateRoom() {
@@ -324,9 +351,8 @@ function App() {
                 totalTime={totalTime}
                 handleRestart={handleRestart}
                 setIsLoading={setIsLoading}
-                userData={userData}
-                strangerCode={strangerCode}
                 roomData={roomData}
+                setRoomData={setRoomData}
               />
             ) : (
               <Board
@@ -386,6 +412,15 @@ function App() {
       </audio>
       <audio id="finishSound">
         <source src={finishSound} type="audio/wav" />
+      </audio>
+      <audio id="joinSound">
+        <source src={joinSound} type="audio/wav" />
+      </audio>
+      <audio id="leaveSound">
+        <source src={leaveSound} type="audio/wav" />
+      </audio>
+      <audio id="backSound">
+        <source src={backSound} type="audio/wav" />
       </audio>
     </Container>
   );

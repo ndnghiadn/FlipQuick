@@ -18,30 +18,16 @@ const StyledButton = styled.button`
 const Finish = ({
   roomData,
   setRoomData,
-  userData,
-  strangerCode,
   totalTime,
   handleRestart,
   setIsLoading,
 }) => {
-  const [logs, setLogs] = useState([]);
-
-  useEffect(() => {
-    if (!roomData) return;
-    if (userData) {
-      setLogs([...roomData.logs, `${userData.username}: ${totalTime}s`]);
-    } else {
-      setLogs([...roomData.logs, `stranger#${strangerCode}: ${totalTime}s`]);
-    }
-  }, [roomData]);
-
   async function handleRefresh() {
     setIsLoading(true);
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomData._id}`
       );
-      setLogs(response.data.data);
       setRoomData({ ...roomData, logs: response.data.data });
     } catch (err) {
       console.log(err);
@@ -55,11 +41,11 @@ const Finish = ({
       <StyledButton onClick={handleRestart} style={{ marginLeft: "10px" }}>
         Back
       </StyledButton>
-      {roomData?._id && (
+      {roomData && (
         <>
           <p>Records in this room:</p>
           <ul>
-            {logs.map((log, index) => (
+            {roomData.logs.map((log, index) => (
               <li key={index}>{log}</li>
             ))}
           </ul>
