@@ -16,17 +16,29 @@ const StyledButton = styled.button`
 `;
 
 const Finish = ({
-  isFinish,
   roomData,
   setRoomData,
   totalTime,
   handleRestart,
   setIsLoading,
+  userData,
+  timeRecord,
+  strangerCode,
 }) => {
   useEffect(() => {
-    if (!isFinish || !roomData) return;
-    handleRefresh();
-  }, [isFinish]);
+    if (!roomData) return;
+    if (userData) {
+      setRoomData({
+        ...roomData,
+        logs: [...roomData.logs, `${userData.username}: ${timeRecord}s`],
+      });
+    } else {
+      setRoomData({
+        ...roomData,
+        logs: [...roomData.logs, `stranger#${strangerCode}: ${timeRecord}s`],
+      });
+    }
+  }, []);
 
   async function handleRefresh() {
     setIsLoading(true);

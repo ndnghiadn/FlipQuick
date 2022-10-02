@@ -251,20 +251,6 @@ function App() {
     const timeRecord = (new Date() - startTime) / 1000;
     setTotalTime(timeRecord);
 
-    if (roomData) {
-      if (userData) {
-        setRoomData({
-          ...roomData,
-          logs: [...roomData.logs, `${userData.username}: ${timeRecord}s`],
-        });
-      } else {
-        setRoomData({
-          ...roomData,
-          logs: [...roomData.logs, `stranger#${strangerCode}: ${timeRecord}s`],
-        });
-      }
-    }
-
     if (userData) {
       // check user record
       if (timeRecord < userData.record) {
@@ -354,6 +340,9 @@ function App() {
                 setIsLoading={setIsLoading}
                 roomData={roomData}
                 setRoomData={setRoomData}
+                userData={userData}
+                timeRecord={totalTime}
+                strangerCode={strangerCode}
               />
             ) : (
               <Board
