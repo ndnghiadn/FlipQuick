@@ -1,8 +1,10 @@
 import Room from "../models/Room.js";
 
 export const createRoom = async (req, res, next) => {
+  const { code } = req.body;
+
   try {
-    const newRoom = new Room();
+    const newRoom = new Room({ code });
 
     await newRoom.save();
     res.status(200).json({
@@ -16,13 +18,16 @@ export const createRoom = async (req, res, next) => {
 
 export const getRoom = async (req, res, next) => {
   try {
-    const { roomId } = req.params;
-    const foundItem = await Room.findById(roomId);
-    if (foundItem)
+    const { roomCode } = req.params;
+    const foundItem = await Room.findOne({ code: roomCode });
+    if (foundItem) {
       res.status(200).json({
         success: true,
         data: foundItem,
       });
+    } else {
+      res.status(404).json({ success: false });
+    }
   } catch (err) {
     next(err);
   }

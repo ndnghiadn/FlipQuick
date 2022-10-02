@@ -2,10 +2,17 @@ import mongoose from "mongoose";
 
 const RoomSchema = new mongoose.Schema(
   {
-    logs: [{
+    code: {
       type: String,
-      default: ""
-    }]
+      unique: true,
+      required: true,
+    },
+    logs: [
+      {
+        type: String,
+        default: "",
+      },
+    ],
   },
   { timestamps: true }
 );

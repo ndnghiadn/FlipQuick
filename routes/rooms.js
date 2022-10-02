@@ -5,10 +5,10 @@ import { verifyToken } from "../middleware/verifyToken.js";
 const router = express.Router();
 
 // Create room
-router.post("/", verifyToken, createRoom);
+router.post("/", createRoom);
 
 // Get room
-router.get("/:roomId", getRoom);
+router.get("/:roomCode", getRoom);
 
 // Get logs
 router.get("/getLogs/:roomId", getLog);
