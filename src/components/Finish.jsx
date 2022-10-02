@@ -26,9 +26,9 @@ const Finish = ({ totalTime, roomId = null, handleRestart }) => {
   async function handleRefresh() {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/rooms/${roomId}`
+        `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomId}`
       );
-      setLogs(response.data.data.logs);
+      setLogs(response.data.data);
     } catch (err) {
       console.log(err);
     }

@@ -179,7 +179,7 @@ function App() {
   }
 
   async function handleJoinRoom() {
-    let tmp = prompt("Please enter room ID");
+    let tmp = prompt("Please enter room code");
     if (!tmp) return;
 
     setIsLoading(true);
@@ -189,7 +189,7 @@ function App() {
       );
       setRoomData(response.data.data);
     } catch (err) {
-      toast.error("Room ID is invalid!");
+      toast.error("Room code is invalid!");
     }
     setIsLoading(false);
   }
@@ -282,6 +282,26 @@ function App() {
     setRoomData(null);
   }
 
+  async function handleCreateRoom() {
+    let tmp = prompt("Please enter room code");
+    if (!tmp) return;
+
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/rooms`,
+        {
+          code: tmp,
+        }
+      );
+      setRoomData(response.data.data);
+      toast.success("Created room successfully!");
+    } catch (err) {
+      toast.error("Please use another room code!");
+    }
+    setIsLoading(false);
+  }
+
   return (
     <Container>
       {isLoading && <Loader />}
@@ -293,13 +313,17 @@ function App() {
       >
         <div className="title-bar">
           <div className="title-bar-text">
-            Flip Quick {roomData && `- Room#${roomData?._id}`}
+            Flip Quick {roomData && `- Room#${roomData?.code}`}
           </div>
         </div>
         <div className="window-body">
           <div style={{ display: "block" }}>
             {isFinish ? (
-              <Finish totalTime={totalTime} roomId={roomData?._id} handleRestart={handleRestart} />
+              <Finish
+                totalTime={totalTime}
+                roomId={roomData?._id}
+                handleRestart={handleRestart}
+              />
             ) : (
               <Board
                 cardsList={randomList}
@@ -310,6 +334,7 @@ function App() {
                 handleLogin={handleLogin}
                 userData={userData}
                 roomData={roomData}
+                handleCreateRoom={handleCreateRoom}
               />
             )}
           </div>

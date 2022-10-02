@@ -19,6 +19,7 @@ const Board = ({
   handleLogin,
   userData,
   roomData,
+  handleCreateRoom,
 }) => {
   const [isStarted, setIsStarted] = useState(false);
 
@@ -47,9 +48,9 @@ const Board = ({
           <StyledButton onClick={() => roomData ? handleLeaveRoom() : handleJoinRoom()}>
             {roomData ? "Leave" : "Join"}
           </StyledButton>
-          {!userData && (
-            <StyledButton onClick={handleLogin}>Login</StyledButton>
-          )}
+          <StyledButton onClick={() => userData ? handleCreateRoom() : handleLogin()}>
+            {userData ? "Create" : "Login"}
+          </StyledButton>
         </>
       )}
     </>
