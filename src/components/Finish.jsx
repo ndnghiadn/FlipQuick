@@ -15,44 +15,11 @@ const StyledButton = styled.button`
   margin: 10px 0;
 `;
 
-const Finish = ({
-  roomData,
-  setRoomData,
-  totalTime,
-  handleRestart,
-  setIsLoading,
-  userData,
-  timeRecord,
-  strangerCode,
-}) => {
+const Finish = ({ handleRefresh, roomData, totalTime, handleRestart }) => {
   useEffect(() => {
     if (!roomData) return;
     handleRefresh();
-    if (userData) {
-      setRoomData({
-        ...roomData,
-        logs: [...roomData.logs, `${userData.username}: ${timeRecord}s`],
-      });
-    } else {
-      setRoomData({
-        ...roomData,
-        logs: [...roomData.logs, `stranger#${strangerCode}: ${timeRecord}s`],
-      });
-    }
   }, []);
-
-  async function handleRefresh() {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomData._id}`
-      );
-      setRoomData({ ...roomData, logs: response.data.data });
-    } catch (err) {
-      console.log(err);
-    }
-    setIsLoading(false);
-  }
 
   return (
     <Container>

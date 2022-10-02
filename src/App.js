@@ -252,6 +252,9 @@ function App() {
     setTotalTime(timeRecord);
 
     if (userData) {
+      // assign log
+      assignLog(`${userData.username}: ${timeRecord}s`);
+
       // check user record
       if (timeRecord < userData.record) {
         // set record of user to new value
@@ -268,6 +271,9 @@ function App() {
         setRecord(timeRecord);
       }
     } else {
+      // assign log
+      assignLog(`stranger#${strangerCode}: ${timeRecord}s`);
+
       // check localStorage
       const foundItem = localStorage.getItem("record");
       if (foundItem) {
@@ -281,11 +287,19 @@ function App() {
       }
     }
 
-    // assign log
-    if (userData) {
-      assignLog(`${userData.username}: ${timeRecord}s`);
-    } else {
-      assignLog(`stranger#${strangerCode}: ${timeRecord}s`);
+    if (roomData) {
+      handleRefresh();
+      if (userData) {
+        setRoomData({
+          ...roomData,
+          logs: [...roomData.logs, `${userData.username}: ${timeRecord}s`],
+        });
+      } else {
+        setRoomData({
+          ...roomData,
+          logs: [...roomData.logs, `stranger#${strangerCode}: ${timeRecord}s`],
+        });
+      }
     }
   }
 
@@ -316,6 +330,22 @@ function App() {
     setIsLoading(false);
   }
 
+  async function handleRefresh() {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/rooms/getLogs/${roomData._id}`
+      );
+      setRoomData({
+        ...roomData,
+        logs: response.data.data,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
+  }
+
   return (
     <Container>
       {isLoading && <Loader />}
@@ -334,6 +364,7 @@ function App() {
           <div style={{ display: "block" }}>
             {isFinish ? (
               <Finish
+                handleRefresh={handleRefresh}
                 isFinish={isFinish}
                 totalTime={totalTime}
                 handleRestart={handleRestart}
