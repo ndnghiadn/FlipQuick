@@ -15,7 +15,7 @@ const StyledButton = styled.button`
   margin: 10px 0;
 `;
 
-const Finish = ({ totalTime, roomId = null }) => {
+const Finish = ({ totalTime, roomId = null, handleRestart }) => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
@@ -36,7 +36,10 @@ const Finish = ({ totalTime, roomId = null }) => {
 
   return (
     <Container>
-      <span>You finished in {totalTime}</span>
+      <span>You finished in {totalTime}</span>{" "}
+      <StyledButton onClick={handleRestart} style={{ marginLeft: "10px" }}>
+        Back
+      </StyledButton>
       {roomId && (
         <>
           <p>Records in this room:</p>

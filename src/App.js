@@ -9,9 +9,8 @@ import Loader from "./components/Loader";
 // SOUNDS
 import gameSound from "./assets/sounds/game.ogg";
 import startSound from "./assets/sounds/start.wav";
+import clickSound from "./assets/sounds/click.wav";
 import finishSound from "./assets/sounds/finish.wav";
-
-import cardTypes from "./data-json/card-types.json";
 
 const Container = styled.div`
   width: 100vw;
@@ -69,6 +68,9 @@ function App() {
         selectedItems[selectedItems.length - 2]?.idKey !==
           selectedItems[selectedItems.length - 1]?.idKey
       ) {
+        // Play sound
+        document.getElementById("clickSound").play();
+
         const code = selectedItems[selectedItems.length - 2]?.code;
         tmp.forEach((item) => {
           if (item.code === code) {
@@ -87,20 +89,29 @@ function App() {
 
   function shuffleCard() {
     const tmp = [];
-    cardTypes.forEach((type) => {
+    const cardLength = 79; // total images
+
+    const randomNumber = new Set();
+    while (randomNumber.size < 8) {
+      randomNumber.add(Math.floor(Math.random() * cardLength) + 1);
+    }
+
+    for (let i = 0; i < 8; i++) {
       tmp.push({
-        ...type,
+        code: i,
         idKey: 1,
         isCorrect: false,
         isSelected: false,
+        src: `/images/champions/${Array.from(randomNumber)[i]}.png`,
       });
       tmp.push({
-        ...type,
+        code: i,
         idKey: 2,
         isCorrect: false,
         isSelected: false,
+        src: `/images/champions/${Array.from(randomNumber)[i]}.png`,
       });
-    });
+    }
 
     let currentIndex = tmp.length,
       randomIndex;
@@ -136,7 +147,7 @@ function App() {
         item.isSelected = true;
       });
       setRandomList(tmp);
-    }, 1000); // Loading image time
+    }, 500); // Loading image time
 
     setTimeout(() => {
       tmp.forEach((item) => {
@@ -284,16 +295,11 @@ function App() {
           <div className="title-bar-text">
             Flip Quick {roomData && `- Room#${roomData?._id}`}
           </div>
-          {isFinish && (
-            <div class="title-bar-controls">
-              <button aria-label="Close" onClick={handleRestart}></button>
-            </div>
-          )}
         </div>
         <div className="window-body">
           <div style={{ display: "block" }}>
             {isFinish ? (
-              <Finish totalTime={totalTime} roomId={roomData?._id} />
+              <Finish totalTime={totalTime} roomId={roomData?._id} handleRestart={handleRestart} />
             ) : (
               <Board
                 cardsList={randomList}
@@ -345,6 +351,9 @@ function App() {
       </audio>
       <audio id="startSound">
         <source src={startSound} type="audio/wav" />
+      </audio>
+      <audio id="clickSound">
+        <source src={clickSound} type="audio/wav" />
       </audio>
       <audio id="finishSound">
         <source src={finishSound} type="audio/wav" />
