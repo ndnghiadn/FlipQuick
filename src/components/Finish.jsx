@@ -16,12 +16,18 @@ const StyledButton = styled.button`
 `;
 
 const Finish = ({
+  isFinish,
   roomData,
   setRoomData,
   totalTime,
   handleRestart,
   setIsLoading,
 }) => {
+  useEffect(() => {
+    if (!isFinish || !roomData) return;
+    handleRefresh();
+  }, [isFinish]);
+
   async function handleRefresh() {
     setIsLoading(true);
     try {

@@ -348,6 +348,7 @@ function App() {
           <div style={{ display: "block" }}>
             {isFinish ? (
               <Finish
+                isFinish={isFinish}
                 totalTime={totalTime}
                 handleRestart={handleRestart}
                 setIsLoading={setIsLoading}
